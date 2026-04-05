@@ -1,12 +1,9 @@
 class TileMap:
-    def __int__(self, window_size):
-        self.window_size = window_size
-    
-    def define_tiles(self):
+    def __int__(self):
         pass
 
 class Tile:
-    def __int__(self):
+    def __int__(self, health_points, color):
         pass
 
 
