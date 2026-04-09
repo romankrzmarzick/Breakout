@@ -1,6 +1,7 @@
 import pygame
 import sys
 from modules.dynamics import Platform, Ball
+from modules.statics import TileMap
 
 WINDOW_SIZE = (600, 700)
 
@@ -13,8 +14,11 @@ class Breakout:
     def run(self):
         platform = Platform()
         ball = Ball()
-        obstacles = platform.rect
+        tilemap = TileMap()
+        ball_obstacles = [platform]
+        ball_obstacles.extend(tilemap.tiles)
         
+
         while True:
             
             # --- Event Phase ---
@@ -25,21 +29,26 @@ class Breakout:
                 if event.type == pygame.KEYDOWN:
                     if ball.unactive:
                         if event.key == pygame.K_UP:
-                            ball.velocity[0] = 4
-                            ball.velocity[1] = -4
+                            ball.velocity[0] = 5
+                            ball.velocity[1] = -5
                             ball.unactive = False
+                    
+                    # Dev border display.
+                    if event.key == pygame.K_k:
+                        pass
 
             # --- Input ---
             keys = pygame.key.get_pressed()
             platform.velocity[0] = 0
-
+            
             if keys[pygame.K_LEFT]:
-                platform.velocity[0] = -5
+                platform.velocity[0] = -4
             if keys[pygame.K_RIGHT]:
-                platform.velocity[0] = 5
-
+                platform.velocity[0] = 4
+            
+            # Ball follows platform at the start before [up] is pressed.
             if ball.unactive:
-                ball.velocity[0] = platform.velocity[0]
+                ball.rect.centerx = platform.rect.centerx
 
             # Background Color
             self.screen.fill((0, 0, 50))
@@ -47,10 +56,12 @@ class Breakout:
             # --- Render ---
             platform.render(self.screen)
             ball.render(self.screen)
-
+          
             # --- Update --- 
             platform.update()
-            ball.update(obstacles)
+            ball.update(ball_obstacles)
+            tilemap.render_blocks(self.screen)
+           
 
             # --- Interactions ---
             

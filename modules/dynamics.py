@@ -15,11 +15,11 @@ class Entities:
     def render(self, screen):
         pygame.draw.rect(screen, self.color, self.rect)
     
-    def test_collisions(self, *args, **kwargs):
+    def test_collisions(self, obstacles):
         collisions = []
-        for obstacle in args:    
-            if self.rect.colliderect(obstacle):
-                collisions.append(obstacle)
+        for obstacle in obstacles:    
+            if self.rect.colliderect(obstacle.rect):
+                collisions.append(obstacle.rect)
         return collisions
     
     def update(self, *args, **kwargs):
@@ -40,7 +40,7 @@ class Platform(Entities):
         
 class Ball(Entities):
     def __init__(self):
-        super().__init__(x=292, y=632, width=16, height=16, color=(255, 0, 0))
+        super().__init__(x=292, y=632, width=16, height=16, color=(235, 235, 235))
         self.radius = 10        
         self.unactive = True
     def render(self, screen):
