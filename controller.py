@@ -8,6 +8,7 @@ WINDOW_SIZE = (600, 700)
 
 class Breakout:
     def __init__(self):
+        pygame.init()
         self.screen = pygame.display.set_mode(WINDOW_SIZE)
         self.clock = pygame.time.Clock()
     
@@ -49,23 +50,19 @@ class Breakout:
             # Ball follows platform at the start before [up] is pressed.
             if ball.unactive:
                 ball.rect.centerx = platform.rect.centerx
-
-            # Background Color
-            self.screen.fill((0, 0, 50))
-
-            # --- Render ---
-            platform.render(self.screen)
-            ball.render(self.screen)
-          
-            # --- Update --- 
+           
+            # --- Update ---
             platform.update()
             ball.update(ball_obstacles)
-            tilemap.render_blocks(self.screen)
            
-
-            # --- Interactions ---
-            
-                
+            # --- Render ---
+            # Background
+            self.screen.fill((0, 0, 50))
+            # Statics
+            tilemap.render_blocks(self.screen)
+            # Dynamics
+            platform.render(self.screen)
+            ball.render(self.screen)     
                
             pygame.display.flip()
             self.clock.tick(60)

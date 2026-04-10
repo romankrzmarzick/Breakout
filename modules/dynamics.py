@@ -19,7 +19,7 @@ class Entities:
         collisions = []
         for obstacle in obstacles:    
             if self.rect.colliderect(obstacle.rect):
-                collisions.append(obstacle.rect)
+                collisions.append(obstacle)
         return collisions
     
     def update(self, *args, **kwargs):
@@ -50,17 +50,20 @@ class Ball(Entities):
         # --- Y-axis movement & collisions ---
         self.rect.y += self.velocity[1]
         collisions = self.test_collisions(obstacles)
-        
+        flip_direction = False
         # --- Obstacle collisions ---
         for collision in collisions:
             # Ball moving down: hitting the top
             if self.velocity[1] > 0:
-                self.rect.bottom = collision.top
-                self.velocity[1] *= -1
+                self.rect.bottom = collision.rect.top
+                flip_direction = True
             # ball moving up: hitting the bottom
             elif self.velocity[1] < 0:
-                self.rect.top = collision.bottom
-                self.velocity[1] *= -1
+                self.rect.top = collision.rect.bottom
+                flip_direction = True
+
+        if flip_direction:
+            self.velocity[1] *= -1
 
         # --- Y-axis boundary ---
         if self.rect.top <= 0:
@@ -73,17 +76,21 @@ class Ball(Entities):
     # --- X-axis movement & collisions ---
         self.rect.x += self.velocity[0]
         collisions = self.test_collisions(obstacles)
-
+        flip_direction = False
         # --- Obstacle collisions ---
         for collision in collisions:
             # ball moving right: hitting the left
             if self.velocity[0] > 0:
-                self.rect.right = collision.left
-                self.velocity[0] *= -1
+                self.rect.right = collision.rect.left
+                flip_direction = True
+
             # Ball moving left: hitting the right
             elif self.velocity[0] < 0:
-                self.rect.left = collision.right
-                self.velocity[0] *= -1
+                self.rect.left = collision.rect.right
+                flip_direction = True
+                
+        if flip_direction:
+            self.velocity[0] *= -1
 
         # --- X-axis boundary ---
         if self.rect.left <= 0:

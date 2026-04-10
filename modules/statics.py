@@ -18,8 +18,9 @@ class TileMap:
                 x = col * bk_wt
                 y = row * bk_ht
                 color = color_list[row % 5]
-                block = Standard(x , y, bk_wt, bk_ht, color)
-                self.tiles.append(block)
+                if not row == 0 and not row == 5:
+                    block = Standard(x , y, bk_wt, bk_ht, color)
+                    self.tiles.append(block)
     
     def render_blocks(self, screen):
         for tile in self.tiles:
